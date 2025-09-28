@@ -443,8 +443,7 @@ st.header("🗺️ Mapa de Propiedades por Clusters")
 
 # Buscar archivo de mapa
 posibles_rutas = [
-    Path(__file__).parent / "madrid_clusters_kmeans_map.html",
-    Path(__file__).parent.parent / "notebooks" / "madrid_clusters_kmeans_map.html"
+    Path(__file__).parent.parent.parent / "backend" / "notebooks" / "madrid_clusters_kmeans_map.html"
 ]
 mapa_encontrado = False
 for ruta in posibles_rutas:
