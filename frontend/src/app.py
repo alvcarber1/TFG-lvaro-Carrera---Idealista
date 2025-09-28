@@ -374,3 +374,6 @@ with col_footer2:
 with col_footer3:
     st.markdown("**📊 Dataset**")
     st.caption("6,735 propiedades reales de Idealista")
+
+if 'cluster_kmeans' in df_clusters.columns:
+    df_clusters = df_clusters.rename(columns={'cluster_kmeans': 'cluster'})
