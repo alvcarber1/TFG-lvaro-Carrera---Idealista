@@ -15,7 +15,8 @@ st.set_page_config(
 )
 
 # Configuración de la API
-API_BASE_URL = os.getenv('BACKEND_URL', 'https://tfg-idealista-backend.onrender.com')
+#API_BASE_URL = os.getenv('BACKEND_URL', 'https://tfg-idealista-backend.onrender.com')
+API_BASE_URL = 'http://localhost:8000'  # Para pruebas locales
 
 st.title('🏠 Predictor de Precios Inmobiliarios Madrid')
 
@@ -442,20 +443,17 @@ st.header("🗺️ Mapa de Propiedades por Clusters")
 
 # Buscar archivo de mapa
 posibles_rutas = [
-    "C:\\Users\\HP\\Desktop\\tfg-alvaro-carrera-idealista\\backend\\notebooks\\madrid_clusters_kmeans_map.html"
+    Path(__file__).parent / "madrid_clusters_kmeans_map.html",
+    Path(__file__).parent.parent / "notebooks" / "madrid_clusters_kmeans_map.html"
 ]
-
 mapa_encontrado = False
 for ruta in posibles_rutas:
-    if Path(ruta).exists():
-        try:
-            with open(ruta, "r", encoding="utf-8") as f:
-                map_html = f.read()
-            components.html(map_html, height=600)
-            mapa_encontrado = True
-            break
-        except Exception as e:
-            st.error(f"Error cargando mapa desde {ruta}: {e}")
+    if ruta.exists():
+        with open(ruta, "r", encoding="utf-8") as f:
+            map_html = f.read()
+        components.html(map_html, height=600)
+        mapa_encontrado = True
+        break
 
 if not mapa_encontrado:
     st.warning("⚠️ No se pudo cargar el mapa interactivo.")

@@ -222,3 +222,6 @@ CACHES = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# # Ruta del modelo entrenado
+# modelo_path = BASE_DIR / 'data' / 'models' / 'mejor_modelo.joblib'
