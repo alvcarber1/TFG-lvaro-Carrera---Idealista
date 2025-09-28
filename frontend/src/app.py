@@ -1,4 +1,3 @@
-import time
 import streamlit as st
 import pandas as pd
 import requests
@@ -38,33 +37,17 @@ with st.sidebar:
     
     # ✅ ESTADO DE CONEXIÓN CON BACKEND
     st.header("🔗 Estado del Sistema")
-    st.write(f"Intentando conectar a: {API_BASE_URL}")
-
     try:
-        start_time = time.time()
-        st.write("Enviando petición...")
-        
         response = requests.get(f"{API_BASE_URL}/api/", timeout=10)
-        elapsed = time.time() - start_time
-        
-        st.write(f"Respuesta recibida en {elapsed:.2f} segundos")
-        st.write(f"Status code: {response.status_code}")
-        
         if response.status_code == 200:
-            st.success("Backend conectado")
-            st.json(response.json())
+            st.success("✅ Backend conectado")
         else:
-            st.error(f"Error: {response.status_code}")
-            st.write(response.text[:200])
-            
-    except requests.exceptions.Timeout:
-        st.error("Timeout - El backend tardó más de 10 segundos en responder")
-    except requests.exceptions.ConnectionError:
-        st.error("Error de conexión - No se puede alcanzar el backend")
+            st.error(f"❌ Backend error: {response.status_code}")
     except Exception as e:
-        st.error(f"Error: {type(e).__name__}: {str(e)}")
+        st.error(f"❌ Sin conexión: {str(e)[:50]}...")
+    
+    st.info(f"🌐 Backend: {API_BASE_URL}")
 
-    st.info(f"Backend URL: {API_BASE_URL}")
 # ✅ FUNCIÓN CORREGIDA PARA CARGAR DISTRITOS
 @st.cache_data
 def cargar_distritos_barrios():
@@ -374,6 +357,3 @@ with col_footer2:
 with col_footer3:
     st.markdown("**📊 Dataset**")
     st.caption("6,735 propiedades reales de Idealista")
-
-if 'cluster_kmeans' in df_clusters.columns:
-    df_clusters = df_clusters.rename(columns={'cluster_kmeans': 'cluster'})
