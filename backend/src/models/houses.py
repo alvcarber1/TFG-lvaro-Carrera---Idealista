@@ -1,0 +1,73 @@
+from django.db import models
+
+class House(models.Model):
+    # Identificador único
+    id = models.AutoField(primary_key=True)
+
+    # Ubicación
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    address = models.CharField(max_length=255, blank=True, null=True)
+    sq_mt_built = models.FloatField(blank=True, null=True)
+    n_rooms = models.IntegerField(blank=True, null=True)
+    n_bathrooms = models.IntegerField(blank=True, null=True)
+    n_floors = models.IntegerField(blank=True, null=True)
+    sq_mt_allotment = models.FloatField(blank=True, null=True)
+    floor = models.CharField(max_length=50, blank=True, null=True)
+    buy_price = models.FloatField(blank=True, null=True)
+    is_renewal_needed = models.BooleanField(default=False)
+    has_lift = models.BooleanField(default=False)
+    is_exterior = models.BooleanField(default=False)
+    energy_certificate = models.CharField(max_length=50, blank=True, null=True)
+    has_parking = models.BooleanField(default=False)
+    neighborhood = models.CharField(max_length=255, blank=True, null=True)
+    district = models.CharField(max_length=255, blank=True, null=True)
+    house_type = models.CharField(max_length=50, blank=True, null=True)
+    sq_mt_useful = models.FloatField(blank=True, null=True)
+    raw_address = models.TextField(blank=True, null=True)
+    is_exact_address_hidden = models.BooleanField(default=False)
+    street_name = models.CharField(max_length=255, blank=True, null=True)
+    street_number = models.CharField(max_length=50, blank=True, null=True)
+    portal = models.CharField(max_length=50, blank=True, null=True)
+    is_floor_under = models.BooleanField(default=False)
+    door = models.CharField(max_length=50, blank=True, null=True)
+    operation = models.CharField(max_length=50, blank=True, null=True)
+    rent_price = models.FloatField(blank=True, null=True)
+    rent_price_by_area = models.FloatField(blank=True, null=True)
+    is_rent_price_known = models.BooleanField(default=False)
+    buy_price_by_area = models.FloatField(blank=True, null=True)
+    is_buy_price_known = models.BooleanField(default=False)
+    is_new_development = models.BooleanField(default=False)
+    built_year = models.IntegerField(blank=True, null=True)
+    has_central_heating = models.BooleanField(default=False)
+    has_individual_heating = models.BooleanField(default=False)
+    are_pets_allowed = models.BooleanField(default=False)
+    has_ac = models.BooleanField(default=False)
+    has_fitted_wardrobes = models.BooleanField(default=False)
+    has_garden = models.BooleanField(default=False)
+    has_pool = models.BooleanField(default=False)
+    has_terrace = models.BooleanField(default=False)
+    has_balcony = models.BooleanField(default=False)
+    has_storage_room = models.BooleanField(default=False)
+    is_furnished = models.BooleanField(default=False)
+    is_kitchen_equipped = models.BooleanField(default=False)
+    is_accessible = models.BooleanField(default=False)
+    has_green_zones = models.BooleanField(default=False)
+    has_private_parking = models.BooleanField(default=False)
+    has_public_parking = models.BooleanField(default=False)
+    is_parking_included_in_price = models.BooleanField(default=False)
+    parking_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    is_orientation_north = models.BooleanField(default=False)
+    is_orientation_west = models.BooleanField(default=False)
+    is_orientation_south = models.BooleanField(default=False)
+    is_orientation_east = models.BooleanField(default=False)
+
+    # Metadatos
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'src_house'
+
+    def __str__(self):
+        return self.address

@@ -1,0 +1,159 @@
+stages:
+  - test
+  - quality
+  - deploy
+
+variables:
+  PYTHON_VERSION: "3.10"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip/
+
+# === TESTS STAGE ===
+test_backend_django:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  services:
+    - postgres:13
+  variables:
+    POSTGRES_DB: test_tfg_idealista
+    POSTGRES_USER: test_user
+    POSTGRES_PASSWORD: test_pass
+    DATABASE_URL: postgresql://test_user:test_pass@postgres:5432/test_tfg_idealista
+  before_script:
+    - cd backend
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install pytest
+  script:
+    - echo "Testing Django backend..."
+    - python manage.py check
+    - python manage.py migrate
+    - python manage.py test
+    - python -m pytest ../tests/test_backend_api.py -v --junitxml=../report_backend.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report_backend.xml
+    expire_in: 1 week
+
+test_frontend_streamlit:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - cd frontend
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install pytest
+  script:
+    - echo "Testing Streamlit frontend..."
+    - python -c "import streamlit; print('Streamlit import OK')"
+    - python -c "import pandas; print('Pandas import OK')"
+    - python -c "import folium; print('Folium import OK')"
+    - python -c "import plotly; print('Plotly import OK')"
+  artifacts:
+    when: always
+    expire_in: 1 week
+
+test_clustering:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install pytest
+  script:
+    - echo "Testing clustering analysis..."
+    - python -m pytest tests/test_clustering.py -v --junitxml=report_clustering.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report_clustering.xml
+    expire_in: 1 week
+
+test_ml_models:
+  stage: test
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install pytest
+  script:
+    - echo "Testing ML models..."
+    - python -m pytest tests/test_model_simple.py -v --junitxml=report_models.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report_models.xml
+    expire_in: 1 week
+
+# === QUALITY STAGE ===
+
+coverage_report:
+  stage: quality
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - pip install pytest-cov
+  script:
+    - echo "Generating coverage report..."
+    - python -m pytest tests/ --cov=backend --cov=scripts --cov-report=xml --cov-report=html
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - htmlcov/
+    expire_in: 1 week
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+
+# === DEPLOY STAGE ===
+validate_deployment:
+  stage: deploy
+  image: python:${PYTHON_VERSION}
+  before_script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - echo "Validating deployment readiness..."
+    - python scripts/validate_models.py
+    - python scripts/integration_test.py
+    - echo "All validations passed!"
+  artifacts:
+    reports:
+      junit: validation_report.xml
+    expire_in: 1 week
+
+deploy_backend_render:
+  stage: deploy
+  image: python:${PYTHON_VERSION}
+  only:
+    - main
+  when: manual
+  environment:
+    name: production-backend
+    url: https://tfg-idealista-backend.onrender.com
+  script:
+    - echo "Deploying Django backend to Render..."
+    - echo "Backend will be deployed automatically via Git webhook"
+    - echo "Monitor at https://dashboard.render.com"
+
+deploy_frontend_vercel:
+  stage: deploy
+  image: node:18
+  before_script:
+    - npm install -g vercel
+  only:
+    - main
+  when: manual
+  environment:
+    name: production-frontend
+    url: https://tfg-idealista-frontend.vercel.app
+  script:
+    - echo "Deploying Streamlit frontend to Vercel..."
+    - cd frontend
+    - vercel --token $VERCEL_TOKEN --prod --yes

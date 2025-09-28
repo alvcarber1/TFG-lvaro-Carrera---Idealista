@@ -1,0 +1,28 @@
+{
+  "builds": [
+    {
+      "src": "frontend/src/app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "frontend/src/app.py"
+    }
+  ],
+  "functions": {
+    "frontend/src/app.py": {
+      "runtime": "python3.10",
+      "maxDuration": 30
+    }
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.10"
+    }
+  },
+  "env": {
+    "BACKEND_URL": "https://tfg-idealista-backend.onrender.com"
+  }
+}

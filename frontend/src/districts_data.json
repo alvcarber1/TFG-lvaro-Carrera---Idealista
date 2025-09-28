@@ -1,0 +1,197 @@
+{
+  "districts": [
+    "Arganzuela",
+    "Barajas", 
+    "Carabanchel",
+    "Centro",
+    "Chamartín",
+    "Chamberí",
+    "Ciudad Lineal",
+    "Fuencarral-El Pardo",
+    "Hortaleza",
+    "Latina",
+    "Moncloa-Aravaca",
+    "Moratalaz",
+    "Puente de Vallecas",
+    "Retiro",
+    "Salamanca",
+    "San Blas-Canillejas",
+    "Tetuán",
+    "Usera",
+    "Vicálvaro",
+    "Villa de Vallecas",
+    "Villaverde"
+  ],
+  "neighborhoods_by_district": {
+    "Centro": [
+      "Sol",
+      "Malasaña",
+      "Chueca", 
+      "La Latina",
+      "Lavapiés",
+      "Cortes"
+    ],
+    "Arganzuela": [
+      "Imperial",
+      "Acacias",
+      "Chopera",
+      "Legazpi",
+      "Delicias",
+      "Palos de Moguer"
+    ],
+    "Retiro": [
+      "Pacífico",
+      "Adelfas",
+      "Estrella",
+      "Ibiza",
+      "Jerónimos",
+      "Niño Jesús"
+    ],
+    "Salamanca": [
+      "Recoletos",
+      "Goya",
+      "Lista",
+      "Castellana",
+      "Guindalera",
+      "Fuente del Berro"
+    ],
+    "Chamartín": [
+      "El Viso",
+      "Prosperidad",
+      "Ciudad Jardín",
+      "Hispanoamérica",
+      "Nueva España",
+      "Castilla"
+    ],
+    "Tetuán": [
+      "Bellas Vistas",
+      "Cuatro Caminos",
+      "Castillejos",
+      "Almenara",
+      "Valdeacederas",
+      "Berruguete"
+    ],
+    "Chamberí": [
+      "Gaztambide",
+      "Arapiles",
+      "Trafalgar",
+      "Almagro",
+      "Vallehermoso",
+      "Ríos Rosas"
+    ],
+    "Fuencarral-El Pardo": [
+      "El Pardo",
+      "Fuentelarreina",
+      "Peñagrande",
+      "Barrio del Pilar",
+      "La Paz",
+      "Valverde",
+      "Mirasierra",
+      "El Goloso"
+    ],
+    "Moncloa-Aravaca": [
+      "Casa de Campo",
+      "Argüelles",
+      "Ciudad Universitaria",
+      "Valdezarza",
+      "Valdemarín",
+      "El Plantío",
+      "Aravaca"
+    ],
+    "Latina": [
+      "Los Cármenes",
+      "Puerta del Ángel",
+      "Lucero",
+      "Aluche",
+      "Las Águilas",
+      "Campamento",
+      "Cuatro Vientos"
+    ],
+    "Carabanchel": [
+      "Comillas",
+      "Opañel",
+      "San Isidro",
+      "Vista Alegre",
+      "Puerta Bonita",
+      "Buenavista",
+      "Abrantes"
+    ],
+    "Usera": [
+      "Orcasitas",
+      "Orcasur",
+      "San Fermín",
+      "Almendrales",
+      "Moscardó",
+      "Zofío",
+      "Pradolongo"
+    ],
+    "Puente de Vallecas": [
+      "Entrevías",
+      "San Diego",
+      "Palomeras Bajas",
+      "Palomeras Sureste",
+      "Portazgo",
+      "Numancia"
+    ],
+    "Moratalaz": [
+      "Pavones",
+      "Horcajo",
+      "Marroquina",
+      "Media Legua",
+      "Fontarrón",
+      "Vinateros"
+    ],
+    "Ciudad Lineal": [
+      "Ventas",
+      "Pueblo Nuevo",
+      "Quintana",
+      "La Concepción",
+      "San Pascual",
+      "San Juan Bautista",
+      "Colina",
+      "Atalaya",
+      "Costillares"
+    ],
+    "Hortaleza": [
+      "Palomas",
+      "Valdefuentes",
+      "Canillas",
+      "Pinar del Rey",
+      "Apóstol Santiago",
+      "Piovera"
+    ],
+    "Villaverde": [
+      "San Andrés",
+      "San Cristóbal",
+      "Butarque",
+      "Los Rosales",
+      "Los Ángeles"
+    ],
+    "Villa de Vallecas": [
+      "Casco Histórico de Vallecas",
+      "Santa Eugenia",
+      "Ensanche de Vallecas"
+    ],
+    "Vicálvaro": [
+      "Casco Histórico de Vicálvaro",
+      "Ambroz"
+    ],
+    "San Blas-Canillejas": [
+      "Simancas",
+      "Hellín",
+      "Amposta",
+      "Arcos",
+      "Rosas",
+      "Rejas",
+      "Canillejas",
+      "Salvador"
+    ],
+    "Barajas": [
+      "Alameda de Osuna",
+      "Aeropuerto",
+      "Casco Histórico de Barajas",
+      "Timón",
+      "Corralejos"
+    ]
+  }
+}
