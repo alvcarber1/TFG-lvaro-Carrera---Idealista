@@ -74,7 +74,7 @@ def validar_coordenadas(lat, lon):
 @st.cache_data(ttl=300)
 def cargar_clustering():
     try:
-        response = requests.get(f"{API_BASE_URL}/clustering/", timeout=10)
+        response = requests.get(f"{API_BASE_URL}/clustering/", timeout=30)
         if response.status_code == 200:
             return pd.DataFrame(response.json()), None
         else:
