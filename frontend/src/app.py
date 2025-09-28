@@ -1,3 +1,4 @@
+from time import time
 import streamlit as st
 import pandas as pd
 import requests
@@ -37,20 +38,33 @@ with st.sidebar:
     
     # ✅ ESTADO DE CONEXIÓN CON BACKEND
     st.header("🔗 Estado del Sistema")
-    try:
-        response = requests.get(f"{API_BASE_URL}/api/", timeout=5)
-        if response.status_code == 200:
-            st.success("✅ Backend conectado")
-            data = response.json()
-            if 'total_properties' in data:
-                st.info(f"📊 Propiedades disponibles: {data['total_properties']}")
-        else:
-            st.error(f"❌ Backend error: {response.status_code}")
-    except Exception as e:
-        st.error("❌ Sin conexión con el backend")
-        st.warning("Verifica que el backend esté activo en Render")
+    st.write(f"Intentando conectar a: {API_BASE_URL}")
 
-    st.info(f"🌐 Backend: {API_BASE_URL}")
+    try:
+        start_time = time.time()
+        st.write("Enviando petición...")
+        
+        response = requests.get(f"{API_BASE_URL}/api/", timeout=10)
+        elapsed = time.time() - start_time
+        
+        st.write(f"Respuesta recibida en {elapsed:.2f} segundos")
+        st.write(f"Status code: {response.status_code}")
+        
+        if response.status_code == 200:
+            st.success("Backend conectado")
+            st.json(response.json())
+        else:
+            st.error(f"Error: {response.status_code}")
+            st.write(response.text[:200])
+            
+    except requests.exceptions.Timeout:
+        st.error("Timeout - El backend tardó más de 10 segundos en responder")
+    except requests.exceptions.ConnectionError:
+        st.error("Error de conexión - No se puede alcanzar el backend")
+    except Exception as e:
+        st.error(f"Error: {type(e).__name__}: {str(e)}")
+
+    st.info(f"Backend URL: {API_BASE_URL}")
 # ✅ FUNCIÓN CORREGIDA PARA CARGAR DISTRITOS
 @st.cache_data
 def cargar_distritos_barrios():

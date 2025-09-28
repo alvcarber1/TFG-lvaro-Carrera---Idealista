@@ -127,11 +127,11 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True  # Solo en desarrollo
 else:
     CORS_ALLOWED_ORIGINS = [
-        "https://tfg-idealista-frontend.vercel.app",
-        "https://tfg-alvaro-carrera-idealista.vercel.app",
-        "http://localhost:8501",  # Streamlit local
-        "http://127.0.0.1:8501",
-    ]
+    "https://tfg-idealista-frontend.onrender.com",  # Agregar esta línea
+    "https://tfg-idealista-frontend.vercel.app",
+    "http://localhost:8501",
+    "http://127.0.0.1:8501",
+]
 
 # ✅ HEADERS CORS PERMITIDOS
 CORS_ALLOW_HEADERS = [
