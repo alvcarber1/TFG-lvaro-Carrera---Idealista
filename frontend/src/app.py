@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # ✅ CONFIGURACIÓN DE LA API PARA PRODUCCIÓN Y DESARROLLO
-API_BASE_URL = os.getenv('BACKEND_URL', 'http://127.0.0.1:8000')
+API_BASE_URL = os.getenv('BACKEND_URL', 'https://tfg-idealista-backend.onrender.com')
 
 # ✅ TÍTULO CORREGIDO
 st.title('🏠 TFG Idealista - Análisis del Mercado Inmobiliario Madrid')
@@ -38,16 +38,19 @@ with st.sidebar:
     # ✅ ESTADO DE CONEXIÓN CON BACKEND
     st.header("🔗 Estado del Sistema")
     try:
-        response = requests.get(f"{API_BASE_URL}/api/", timeout=10)
+        response = requests.get(f"{API_BASE_URL}/api/", timeout=5)
         if response.status_code == 200:
             st.success("✅ Backend conectado")
+            data = response.json()
+            if 'total_properties' in data:
+                st.info(f"📊 Propiedades disponibles: {data['total_properties']}")
         else:
             st.error(f"❌ Backend error: {response.status_code}")
     except Exception as e:
-        st.error(f"❌ Sin conexión: {str(e)[:50]}...")
-    
-    st.info(f"🌐 Backend: {API_BASE_URL}")
+        st.error("❌ Sin conexión con el backend")
+        st.warning("Verifica que el backend esté activo en Render")
 
+    st.info(f"🌐 Backend: {API_BASE_URL}")
 # ✅ FUNCIÓN CORREGIDA PARA CARGAR DISTRITOS
 @st.cache_data
 def cargar_distritos_barrios():
