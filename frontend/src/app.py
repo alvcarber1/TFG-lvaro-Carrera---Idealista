@@ -1,4 +1,4 @@
-from time import time
+import time
 import streamlit as st
 import pandas as pd
 import requests
