@@ -21,3 +21,4 @@ requests>=2.31.0
 # === ADDITIONAL DEPENDENCIES ===
 altair>=5.0.0
 pillow>=9.5.0
+xgboost>=1.7.0

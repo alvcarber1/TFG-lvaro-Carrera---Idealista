@@ -39,3 +39,5 @@ plotly>=5.17.0
 
 # === UTILITIES ===
 requests>=2.31.0
+# === MACHINE LEARNING ===
+xgboost>=1.7.0
