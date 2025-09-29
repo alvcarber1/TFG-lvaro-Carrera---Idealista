@@ -53,12 +53,12 @@ jobs:
           python manage.py check
           python manage.py migrate
           python manage.py test
-          python -m pytest ../tests/test_backend_api.py -v --junitxml=../report_backend.xml
+          python -m pytest ../tests/test_backend_api.py -v --junitxml=report_backend.xml
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         with:
           name: report-backend
-          path: backend/../report_backend.xml
+          path: report_backend.xml
           retention-days: 7
 
   test-frontend-streamlit:
