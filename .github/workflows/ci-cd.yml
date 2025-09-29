@@ -1,0 +1,207 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: "3.10"
+  PIP_CACHE_DIR: ${{ github.workspace }}/.cache/pip
+
+jobs:
+
+  test-backend-django:
+    name: Test Backend Django
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: test_tfg_idealista
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    env:
+      DATABASE_URL: postgresql://test_user:test_pass@localhost:5432/test_tfg_idealista
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test Django backend
+        run: |
+          echo "🌐 Testing Django backend..."
+          python manage.py check
+          python manage.py migrate
+          python manage.py test
+          python -m pytest ../tests/test_backend_api.py -v --junitxml=../report_backend.xml
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-backend
+          path: backend/../report_backend.xml
+          retention-days: 7
+
+  test-frontend-streamlit:
+    name: Test Frontend Streamlit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test Streamlit frontend
+        run: |
+          echo "🎨 Testing Streamlit frontend..."
+          python -c "import streamlit; print('Streamlit import OK')"
+          python -c "import pandas; print('Pandas import OK')"
+          python -c "import folium; print('Folium import OK')"
+          python -c "import plotly; print('Plotly import OK')"
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-frontend
+          path: frontend/
+          retention-days: 7
+
+  test-clustering:
+    name: Test Clustering Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test clustering
+        run: |
+          echo "🏘️ Testing clustering analysis..."
+          python -m pytest tests/test_clustering.py -v --junitxml=report_clustering.xml
+      - name: Upload Clustering Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-clustering
+          path: report_clustering.xml
+          retention-days: 7
+
+  test-ml-models:
+    name: Test ML Models
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Test ML models
+        run: |
+          echo "🤖 Testing ML models..."
+          python -m pytest tests/test_model_simple.py -v --junitxml=report_models.xml
+      - name: Upload ML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-models
+          path: report_models.xml
+          retention-days: 7
+
+  code-quality-backend:
+    name: Backend Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install quality tools
+        run: pip install flake8 black isort
+      - name: Backend code quality
+        run: |
+          echo "🔍 Backend code quality..."
+          flake8 backend/ --max-line-length=88 --extend-ignore=E203,W503
+          black --check backend/ || echo "Code formatting issues found"
+          isort --check-only backend/ || echo "Import order issues found"
+
+  code-quality-frontend:
+    name: Frontend Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install quality tools
+        run: pip install flake8 black isort
+      - name: Frontend code quality
+        run: |
+          echo "🔍 Frontend code quality..."
+          flake8 frontend/ --max-line-length=88 --extend-ignore=E203,W503
+          black --check frontend/ || echo "Code formatting issues found"
+
+  coverage-report:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-cov
+      - name: Generate coverage report
+        run: |
+          echo "📊 Generating coverage report..."
+          python -m pytest tests/ --cov=backend --cov=scripts --cov-report=xml --cov-report=html
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage.xml
+            htmlcov/
+          retention-days: 7
