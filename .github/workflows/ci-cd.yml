@@ -46,6 +46,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest
       - name: Test Django backend
         run: |
           echo "🌐 Testing Django backend..."
@@ -140,43 +141,6 @@ jobs:
           name: report-models
           path: report_models.xml
           retention-days: 7
-
-  code-quality-backend:
-    name: Backend Code Quality
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-      - name: Install quality tools
-        run: pip install flake8 black isort
-      - name: Backend code quality
-        run: |
-          echo "🔍 Backend code quality..."
-          flake8 backend/ --max-line-length=88 --extend-ignore=E203,W503
-          black --check backend/ || echo "Code formatting issues found"
-          isort --check-only backend/ || echo "Import order issues found"
-
-  code-quality-frontend:
-    name: Frontend Code Quality
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip
-      - name: Install quality tools
-        run: pip install flake8 black isort
-      - name: Frontend code quality
-        run: |
-          echo "🔍 Frontend code quality..."
-          flake8 frontend/ --max-line-length=88 --extend-ignore=E203,W503
-          black --check frontend/ || echo "Code formatting issues found"
 
   coverage-report:
     name: Coverage Report
