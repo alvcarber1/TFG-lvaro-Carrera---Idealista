@@ -16,7 +16,6 @@ st.set_page_config(
 
 # Configuración de la API
 API_BASE_URL = os.getenv('BACKEND_URL', 'https://tfg-idealista-backend.onrender.com')
-#API_BASE_URL = 'http://localhost:8000'  # Para pruebas locales
 
 st.title('🏠 Predictor de Precios Inmobiliarios Madrid')
 
